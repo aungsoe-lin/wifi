@@ -1,0 +1,61 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id              String   @id @default(cuid())
+  email           String   @unique
+  name            String?
+  role            Role     @default(VOLUNTEER)
+  assignedVillage String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Customer {
+  id         String   @id @default(cuid())
+  name       String
+  phone      String
+  village    String
+  planName   String
+  monthlyFee Float
+  status     Status   @default(ACTIVE)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  bills      Bill[]
+}
+
+model Bill {
+  id           String   @id @default(cuid())
+  customerId   String
+  customer     Customer @relation(fields: [customerId], references: [id])
+  customerName String
+  village      String
+  month        Int
+  year         Int
+  amount       Float
+  status       BillStatus @default(UNPAID)
+  dueDate      DateTime
+  paidAt       DateTime?
+  createdAt    DateTime @default(now())
+}
+
+enum Role {
+  ADMIN
+  VOLUNTEER
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+}
+
+enum BillStatus {
+  PAID
+  UNPAID
+}

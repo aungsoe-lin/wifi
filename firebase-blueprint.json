@@ -1,0 +1,54 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Represents a system user (Admin or Volunteer).",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "role": { "type": "string", "enum": ["ADMIN", "VOLUNTEER"] },
+        "assignedVillage": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "email", "role"]
+    },
+    "Customer": {
+      "title": "Customer",
+      "description": "Represents a Wi-Fi customer.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "phone": { "type": "string" },
+        "village": { "type": "string" },
+        "planName": { "type": "string" },
+        "monthlyFee": { "type": "number" },
+        "status": { "type": "string", "enum": ["ACTIVE", "INACTIVE"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "phone", "village", "planName", "monthlyFee", "status"]
+    },
+    "Bill": {
+      "title": "Bill",
+      "description": "Monthly bill for a customer.",
+      "type": "object",
+      "properties": {
+        "customerId": { "type": "string" },
+        "customerName": { "type": "string" },
+        "village": { "type": "string" },
+        "month": { "type": "number" },
+        "year": { "type": "number" },
+        "amount": { "type": "number" },
+        "status": { "type": "string", "enum": ["PAID", "UNPAID"] },
+        "dueDate": { "type": "string", "format": "date-time" },
+        "paidAt": { "type": "string" }
+      },
+      "required": ["customerId", "month", "year", "amount", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": { "schema": "User", "description": "User profiles" },
+    "/customers/{customerId}": { "schema": "Customer", "description": "Customers" },
+    "/bills/{billId}": { "schema": "Bill", "description": "Bills" }
+  }
+}
